@@ -16,20 +16,66 @@ export function Button({
   disabled,
   ...props 
 }: ButtonProps) {
-  const baseStyles = 'transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseStyles = `
+    transition-all
+    disabled:opacity-50 
+    disabled:cursor-not-allowed
+    font-medium
+  `.replace(/\s+/g, ' ').trim();
   
   const variantStyles = {
-    primary: 'bg-[var(--color-brand-primary)] hover:bg-[var(--color-brand-secondary)] text-white',
-    secondary: 'bg-gray-200 hover:bg-gray-300 text-[var(--color-text-primary)]',
-    success: 'bg-[var(--color-success)] hover:bg-green-600 text-white',
-    warning: 'bg-[var(--color-warning)] hover:bg-orange-600 text-white',
-    error: 'bg-[var(--color-error)] hover:bg-red-600 text-white',
+    primary: `
+      text-[var(--color-text-inverse)]
+      hover:opacity-90
+    `,
+    secondary: `
+      bg-gray-200 
+      hover:bg-gray-300 
+      text-[var(--color-text-primary)]
+    `,
+    success: `
+      text-[var(--color-text-inverse)]
+      hover:opacity-90
+    `,
+    warning: `
+      text-[var(--color-text-inverse)]
+      hover:opacity-90
+    `,
+    error: `
+      text-[var(--color-text-inverse)]
+      hover:opacity-90
+    `,
   };
   
   const sizeStyles = {
-    sm: 'px-3 py-1.5 text-sm rounded-xl',
-    md: 'px-6 py-3 rounded-2xl',
-    lg: 'px-8 py-4 text-lg rounded-3xl',
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-6 py-3',
+    lg: 'px-8 py-4 text-lg',
+  };
+  
+  // 인라인 스타일로 토큰 적용
+  const getVariantStyle = () => {
+    const styles: React.CSSProperties = {
+      transition: 'var(--transition-base)',
+      borderRadius: 'var(--button-border-radius)',
+    };
+    
+    switch (variant) {
+      case 'primary':
+        styles.backgroundColor = 'var(--color-brand-primary)';
+        break;
+      case 'success':
+        styles.backgroundColor = 'var(--color-success)';
+        break;
+      case 'warning':
+        styles.backgroundColor = 'var(--color-warning)';
+        break;
+      case 'error':
+        styles.backgroundColor = 'var(--color-error)';
+        break;
+    }
+    
+    return styles;
   };
   
   const widthStyle = fullWidth ? 'w-full' : '';
@@ -37,6 +83,7 @@ export function Button({
   return (
     <button
       className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${widthStyle} ${className}`}
+      style={getVariantStyle()}
       disabled={disabled}
       {...props}
     >

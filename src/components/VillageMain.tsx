@@ -1,5 +1,5 @@
 import { Home, Package } from 'lucide-react';
-import type { Campaign } from '../App';
+import { Campaign } from '../types';
 
 interface VillageMainProps {
   campaigns: Campaign[];
@@ -15,15 +15,35 @@ export function VillageMain({
   onInventoryClick
 }: VillageMainProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-300 via-sky-200 to-green-200 relative overflow-hidden">
+    <div 
+      className="min-h-screen relative overflow-hidden"
+      style={{
+        background: 'linear-gradient(to bottom, #7DD3FC, #BAE6FD, #86EFAC)'
+      }}
+    >
       {/* 마을 이름 배너 */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
         <div className="relative">
           {/* 배너 리본 */}
-          <div className="bg-yellow-400 px-12 py-3 rounded-lg shadow-lg border-4 border-yellow-500 relative">
+          <div 
+            className="px-12 py-3 shadow-lg border-4 relative"
+            style={{
+              backgroundColor: 'var(--color-points)',
+              borderColor: '#EAB308',
+              borderRadius: 'var(--radius-lg)',
+              boxShadow: 'var(--shadow-lg)',
+            }}
+          >
             <div className="absolute -left-4 top-0 w-0 h-0 border-t-[20px] border-t-yellow-600 border-r-[16px] border-r-transparent"></div>
             <div className="absolute -right-4 top-0 w-0 h-0 border-t-[20px] border-t-yellow-600 border-l-[16px] border-l-transparent"></div>
-            <h1 className="text-gray-600 text-center tracking-wider" style={{ fontSize: '24px', fontWeight: '600' }}>
+            <h1 
+              className="text-center tracking-wider"
+              style={{ 
+                color: 'var(--color-text-primary)',
+                fontSize: 'var(--font-size-2xl)',
+                fontWeight: 'var(--font-weight-semibold)',
+              }}
+            >
               기부 마을
             </h1>
           </div>
@@ -34,13 +54,33 @@ export function VillageMain({
       <div className="relative min-h-screen flex items-center justify-center p-8 pt-32 pb-28">
         <div className="relative w-full max-w-4xl aspect-square">
           {/* 섬 배경 */}
-          <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-green-500 rounded-[100px] shadow-2xl border-8 border-yellow-300">
+          <div 
+            className="absolute inset-0 border-8"
+            style={{
+              background: 'linear-gradient(135deg, #4ADE80, #22C55E)',
+              borderRadius: '100px',
+              borderColor: '#FDE047',
+              boxShadow: 'var(--shadow-2xl)',
+            }}
+          >
             {/* 모래 해변 */}
-            <div className="absolute inset-0 rounded-[92px] border-[20px] border-yellow-200 opacity-60"></div>
+            <div 
+              className="absolute inset-0 border-[20px] opacity-60"
+              style={{
+                borderColor: '#FEF08A',
+                borderRadius: '92px',
+              }}
+            />
           </div>
 
           {/* 물 효과 */}
-          <div className="absolute -inset-4 bg-blue-400 opacity-30 rounded-[110px] -z-10 blur-sm"></div>
+          <div 
+            className="absolute -inset-4 opacity-30 -z-10 blur-sm"
+            style={{
+              backgroundColor: '#60A5FA',
+              borderRadius: '110px',
+            }}
+          />
 
           {/* 길 - 가로 */}
           <div className="absolute top-1/2 left-0 right-0 h-16 bg-yellow-600 opacity-40 -translate-y-1/2"></div>
@@ -63,20 +103,47 @@ export function VillageMain({
           {/* 내 집 - 중앙 상단 */}
           <button
             onClick={onMyHouseClick}
-            className="absolute top-[18%] left-1/2 -translate-x-1/2 transform hover:scale-110 transition-all group"
-            style={{ zIndex: 10 }}
+            className="absolute top-[18%] left-1/2 -translate-x-1/2 transform hover:scale-110 group"
+            style={{ 
+              zIndex: 10,
+              transition: 'var(--transition-base)',
+            }}
           >
             <div className="relative">
               {/* 그림자 */}
               <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-20 h-4 bg-black/20 rounded-full blur-sm"></div>
               
               {/* 집 */}
-              <div className="relative bg-yellow-400 border-4 border-yellow-600 rounded-2xl px-8 py-6 shadow-xl">
+              <div 
+                className="relative border-4 px-8 py-6"
+                style={{
+                  backgroundColor: 'var(--color-points)',
+                  borderColor: '#CA8A04',
+                  borderRadius: 'var(--radius-xl)',
+                  boxShadow: 'var(--shadow-xl)',
+                }}
+              >
                 <div className="text-5xl mb-2">🏠</div>
-                <div className="text-yellow-900 font-bold text-sm whitespace-nowrap">내 집</div>
+                <div 
+                  className="text-sm whitespace-nowrap"
+                  style={{ 
+                    color: '#78350F',
+                    fontWeight: 'var(--font-weight-bold)',
+                  }}
+                >
+                  내 집
+                </div>
                 
                 {/* 호버 효과 */}
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-yellow-100 px-3 py-1 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-sm">
+                <div 
+                  className="absolute -top-8 left-1/2 -translate-x-1/2 px-3 py-1 opacity-0 group-hover:opacity-100 whitespace-nowrap text-sm"
+                  style={{
+                    backgroundColor: '#FEF3C7',
+                    borderRadius: 'var(--radius-lg)',
+                    boxShadow: 'var(--shadow-lg)',
+                    transition: 'var(--transition-base)',
+                  }}
+                >
                   집 꾸미기 ✨
                 </div>
               </div>
@@ -98,14 +165,15 @@ export function VillageMain({
               <button
                 key={campaign.id}
                 onClick={() => onOrganizationClick(campaign)}
-                className="absolute transform hover:scale-110 transition-all group"
+                className="absolute transform hover:scale-110 group"
                 style={{
                   top: pos.top,
                   left: pos.left,
                   right: pos.right,
                   bottom: pos.bottom,
                   transform: pos.transform ? `translateX(${pos.transform})` : undefined,
-                  zIndex: 10
+                  zIndex: 10,
+                  transition: 'var(--transition-base)',
                 }}
               >
                 <div className="relative">
@@ -114,11 +182,13 @@ export function VillageMain({
                   
                   {/* 집 */}
                   <div 
-                    className="relative border-4 rounded-2xl px-6 py-5 shadow-xl"
+                    className="relative border-4 px-6 py-5"
                     style={{ 
                       backgroundColor: campaign.houseColor,
                       borderColor: campaign.houseColor,
-                      filter: 'brightness(1.1)'
+                      filter: 'brightness(1.1)',
+                      borderRadius: 'var(--radius-xl)',
+                      boxShadow: 'var(--shadow-xl)',
                     }}
                   >
                     <div className="text-5xl mb-2">
@@ -126,24 +196,56 @@ export function VillageMain({
                       {campaign.category === '환경' && '🌳'}
                       {campaign.category === '교육' && '📚'}
                     </div>
-                    <div className="text-white font-bold text-xs text-center max-w-[100px] truncate">
+                    <div 
+                      className="text-xs text-center max-w-[100px] truncate"
+                      style={{ 
+                        color: 'white',
+                        fontWeight: 'var(--font-weight-bold)',
+                      }}
+                    >
                       {campaign.organizationName}
                     </div>
                     
                     {/* 호버 정보 */}
-                    <div className="absolute -top-20 left-1/2 -translate-x-1/2 bg-white px-4 py-3 rounded-xl shadow-xl opacity-0 group-hover:opacity-100 transition-opacity w-48 border-2 pointer-events-none" style={{ borderColor: campaign.houseColor }}>
-                      <div className="font-bold text-sm mb-1 truncate">{campaign.title}</div>
-                      <div className="text-xs text-gray-600 mb-2">{campaign.category}</div>
-                      <div className="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className="absolute -top-20 left-1/2 -translate-x-1/2 px-4 py-3 opacity-0 group-hover:opacity-100 w-48 border-2 pointer-events-none"
+                      style={{ 
+                        backgroundColor: 'var(--color-bg-tertiary)',
+                        borderColor: campaign.houseColor,
+                        borderRadius: 'var(--radius-xl)',
+                        boxShadow: 'var(--shadow-xl)',
+                        transition: 'var(--transition-base)',
+                      }}
+                    >
+                      <div 
+                        className="text-sm mb-1 truncate"
+                        style={{ fontWeight: 'var(--font-weight-bold)' }}
+                      >
+                        {campaign.title}
+                      </div>
+                      <div 
+                        className="text-xs mb-2"
+                        style={{ color: 'var(--color-text-secondary)' }}
+                      >
+                        {campaign.category}
+                      </div>
+                      <div 
+                        className="w-full h-1.5 rounded-full overflow-hidden"
+                        style={{ backgroundColor: '#E5E7EB' }}
+                      >
                         <div
-                          className="h-full transition-all"
+                          className="h-full"
                           style={{ 
                             width: `${(campaign.currentAmount / campaign.goalAmount) * 100}%`,
-                            backgroundColor: campaign.houseColor
+                            backgroundColor: campaign.houseColor,
+                            transition: 'var(--transition-base)',
                           }}
                         />
                       </div>
-                      <div className="text-xs text-gray-500 mt-1">
+                      <div 
+                        className="text-xs mt-1"
+                        style={{ color: 'var(--color-text-tertiary)' }}
+                      >
                         {Math.round((campaign.currentAmount / campaign.goalAmount) * 100)}% 달성
                       </div>
                     </div>
@@ -172,31 +274,71 @@ export function VillageMain({
 
       {/* 하단 안내 */}
       <div className="absolute bottom-24 left-1/2 -translate-x-1/2 w-full max-w-md px-4">
-        <div className="bg-white/90 backdrop-blur rounded-2xl shadow-lg p-4 border-2 border-green-300">
-          <p className="text-green-700 text-center text-sm">
+        <div 
+          className="backdrop-blur p-4 border-2"
+          style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderColor: 'var(--color-brand-light)',
+            borderRadius: 'var(--radius-xl)',
+            boxShadow: 'var(--shadow-lg)',
+          }}
+        >
+          <p 
+            className="text-center text-sm"
+            style={{ color: 'var(--color-brand-secondary)' }}
+          >
             💡 집을 클릭해서 방문하고 기부해보세요!
           </p>
         </div>
       </div>
 
       {/* Bottom navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t-4 border-green-300 shadow-2xl z-50">
+      <div 
+        className="fixed bottom-0 left-0 right-0 border-t-4 z-50"
+        style={{
+          backgroundColor: 'var(--color-bg-tertiary)',
+          borderColor: 'var(--color-brand-light)',
+          boxShadow: 'var(--shadow-2xl)',
+        }}
+      >
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex justify-around gap-4">
-            <button className="flex-1 flex items-center justify-center gap-2 bg-green-500 text-white py-3 rounded-xl">
+            <button 
+              className="flex-1 flex items-center justify-center gap-2 py-3"
+              style={{
+                backgroundColor: 'var(--color-brand-primary)',
+                color: 'var(--color-text-inverse)',
+                borderRadius: 'var(--radius-xl)',
+                fontWeight: 'var(--font-weight-medium)',
+              }}
+            >
               <Home className="w-5 h-5" />
               마을
             </button>
             <button
               onClick={onMyHouseClick}
-              className="flex-1 flex items-center justify-center gap-2 bg-yellow-500 text-white py-3 rounded-xl hover:bg-yellow-600 transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 py-3 hover:opacity-90"
+              style={{
+                backgroundColor: '#EAB308',
+                color: 'var(--color-text-inverse)',
+                borderRadius: 'var(--radius-xl)',
+                fontWeight: 'var(--font-weight-medium)',
+                transition: 'var(--transition-base)',
+              }}
             >
               <Home className="w-5 h-5" />
               내 집
             </button>
             <button
               onClick={onInventoryClick}
-              className="flex-1 flex items-center justify-center gap-2 bg-blue-500 text-white py-3 rounded-xl hover:bg-blue-600 transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 py-3 hover:opacity-90"
+              style={{
+                backgroundColor: 'var(--color-info)',
+                color: 'var(--color-text-inverse)',
+                borderRadius: 'var(--radius-xl)',
+                fontWeight: 'var(--font-weight-medium)',
+                transition: 'var(--transition-base)',
+              }}
             >
               <Package className="w-5 h-5" />
               가방

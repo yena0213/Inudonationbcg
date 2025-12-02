@@ -8,3 +8,6 @@ export { Badge } from './Badge';
 export { Modal } from './Modal';
 export { Input } from './Input';
 export { ProgressBar } from './ProgressBar';
+export { LoadingSpinner } from './LoadingSpinner';
+export { Container } from './Container';
+export { PageHeader } from './PageHeader';

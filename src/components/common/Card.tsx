@@ -23,21 +23,25 @@ export function Card({
     lg: 'p-8',
   };
   
-  const shadowStyle = shadow ? 'shadow-[var(--shadow-lg)]' : '';
-  const hoverStyle = hover ? 'hover:shadow-[var(--shadow-xl)] hover:scale-[1.02] transition-all duration-200 cursor-pointer' : '';
-  const clickStyle = onClick ? 'cursor-pointer' : '';
+  const hoverClass = hover ? 'hover:scale-[1.02] cursor-pointer' : '';
+  const clickClass = onClick ? 'cursor-pointer' : '';
+  
+  const style: React.CSSProperties = {
+    backgroundColor: 'var(--color-bg-tertiary)',
+    borderRadius: 'var(--card-border-radius)',
+    boxShadow: shadow ? 'var(--card-shadow)' : 'none',
+    transition: 'var(--transition-base)',
+  };
   
   return (
     <div
       className={`
-        bg-white 
-        rounded-[var(--card-border-radius)]
         ${paddingStyles[padding]}
-        ${shadowStyle}
-        ${hoverStyle}
-        ${clickStyle}
+        ${hoverClass}
+        ${clickClass}
         ${className}
       `}
+      style={style}
       onClick={onClick}
     >
       {children}
