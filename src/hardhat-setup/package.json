@@ -1,0 +1,32 @@
+{
+  "name": "donation-village-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for Donation Village - Blockchain-based transparent donation platform",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network arbitrumSepolia",
+    "verify": "hardhat verify --network arbitrumSepolia",
+    "node": "hardhat node"
+  },
+  "keywords": [
+    "blockchain",
+    "donation",
+    "arbitrum",
+    "ethereum",
+    "smart-contracts"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "5.0.0",
+    "hardhat": "2.22.16"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.0.0",
+    "dotenv": "16.3.1",
+    "ethers": "6.9.0"
+  }
+}

@@ -1,0 +1,188 @@
+/**
+ * 디자인 토큰 - 기부 마을 테마
+ * 색상, 간격, 폰트 등 모든 디자인 요소를 토큰화
+ */
+
+:root {
+  /* ========== 색상 토큰 ========== */
+  
+  /* 메인 브랜드 색상 */
+  --color-brand-primary: #22C55E;      /* 밝은 초록 - 따뜻한 기부 */
+  --color-brand-secondary: #10B981;    /* 진한 초록 */
+  --color-brand-light: #86EFAC;        /* 연한 초록 */
+  --color-brand-dark: #166534;         /* 어두운 초록 */
+  
+  /* 배경 색상 */
+  --color-bg-primary: #FEFCE8;         /* 크림색 배경 (동물의 숲 느낌) */
+  --color-bg-secondary: #FEF3C7;       /* 노란 배경 */
+  --color-bg-tertiary: #FFFFFF;        /* 흰색 */
+  --color-bg-overlay: rgba(0, 0, 0, 0.5); /* 오버레이 */
+  
+  /* 텍스트 색상 */
+  --color-text-primary: #1F2937;       /* 메인 텍스트 */
+  --color-text-secondary: #6B7280;     /* 서브 텍스트 */
+  --color-text-tertiary: #9CA3AF;      /* 비활성 텍스트 */
+  --color-text-inverse: #FFFFFF;       /* 반전 텍스트 */
+  
+  /* 카테고리 색상 */
+  --color-category-animal: #FF6B6B;    /* 동물 - 빨강 */
+  --color-category-environment: #51CF66; /* 환경 - 초록 */
+  --color-category-education: #4DABF7; /* 교육 - 파랑 */
+  
+  /* 상태 색상 */
+  --color-success: #22C55E;            /* 성공 */
+  --color-warning: #F59E0B;            /* 경고 */
+  --color-error: #EF4444;              /* 에러 */
+  --color-info: #3B82F6;               /* 정보 */
+  
+  /* 포인트 & 뱃지 */
+  --color-points: #FCD34D;             /* 포인트 금색 */
+  --color-badge-bronze: #CD7F32;       /* 브론즈 뱃지 */
+  --color-badge-silver: #C0C0C0;       /* 실버 뱃지 */
+  --color-badge-gold: #FFD700;         /* 골드 뱃지 */
+  
+  /* 테두리 & 구분선 */
+  --color-border-light: #E5E7EB;       /* 연한 테두리 */
+  --color-border-medium: #D1D5DB;      /* 중간 테두리 */
+  --color-border-dark: #9CA3AF;        /* 진한 테두리 */
+  
+  /* 그림자 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* ========== 간격 토큰 ========== */
+  --spacing-xs: 0.25rem;    /* 4px */
+  --spacing-sm: 0.5rem;     /* 8px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-2xl: 3rem;      /* 48px */
+  --spacing-3xl: 4rem;      /* 64px */
+  
+  /* ========== 폰트 토큰 ========== */
+  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-family-display: 'Comic Sans MS', cursive, sans-serif; /* 동물의 숲 느낌 */
+  
+  /* 폰트 크기 */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+  
+  /* 폰트 굵기 */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* 행간 */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* ========== 보더 라디우스 ========== */
+  --radius-sm: 0.375rem;    /* 6px */
+  --radius-md: 0.5rem;      /* 8px */
+  --radius-lg: 0.75rem;     /* 12px */
+  --radius-xl: 1rem;        /* 16px */
+  --radius-2xl: 1.5rem;     /* 24px */
+  --radius-3xl: 2rem;       /* 32px */
+  --radius-full: 9999px;    /* 완전한 원 */
+  
+  /* ========== 애니메이션 ========== */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 250ms ease-in-out;
+  --transition-slow: 350ms ease-in-out;
+  
+  /* ========== Z-Index ========== */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-popover: 50;
+  --z-tooltip: 60;
+  
+  /* ========== 컴포넌트 특화 토큰 ========== */
+  
+  /* 버튼 */
+  --button-padding-x: var(--spacing-lg);
+  --button-padding-y: var(--spacing-md);
+  --button-border-radius: var(--radius-2xl);
+  
+  /* 카드 */
+  --card-padding: var(--spacing-xl);
+  --card-border-radius: var(--radius-3xl);
+  --card-shadow: var(--shadow-lg);
+  
+  /* 입력 필드 */
+  --input-padding-x: var(--spacing-md);
+  --input-padding-y: var(--spacing-sm);
+  --input-border-radius: var(--radius-xl);
+  --input-border-width: 2px;
+  
+  /* 모달 */
+  --modal-max-width: 28rem;  /* 448px */
+  --modal-border-radius: var(--radius-3xl);
+  --modal-shadow: var(--shadow-2xl);
+  
+  /* 하우스 (마을 건물) */
+  --house-size-sm: 150px;
+  --house-size-md: 200px;
+  --house-size-lg: 250px;
+}
+
+/* ========== 다크 모드 (미래 확장용) ========== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-primary: #1F2937;
+    --color-bg-secondary: #374151;
+    --color-bg-tertiary: #111827;
+    --color-text-primary: #F9FAFB;
+    --color-text-secondary: #D1D5DB;
+    --color-text-tertiary: #9CA3AF;
+  }
+}
+
+/* ========== 유틸리티 클래스 ========== */
+.animate-bounce-slow {
+  animation: bounce 2s infinite;
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-base) ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-base) ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-brand-primary), var(--color-brand-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
