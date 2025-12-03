@@ -162,33 +162,76 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // MetaMask 로그인 (하이브리드 DID)
   const loginWithMetamask = async () => {
+    console.log('🦊 MetaMask 로그인 시작...');
+
     if (!(window as any).ethereum) {
-      throw new Error('MetaMask 지갑이 설치되어 있지 않습니다');
+      console.error('❌ MetaMask not found');
+      throw new Error('MetaMask 지갑이 설치되어 있지 않습니다. https://metamask.io 에서 설치해주세요.');
     }
 
+    console.log('✅ MetaMask detected');
     const browserProvider = new ethers.BrowserProvider((window as any).ethereum);
     setMetamaskProvider(browserProvider);
 
-    // 네트워크 확인 및 필요 시 전환
-    try {
-      const network = await browserProvider.getNetwork();
-      if (network.chainId !== 421614n) {
-        await browserProvider.send('wallet_switchEthereumChain', [{ chainId: '0x66eee' }]); // 421614 in hex
-      }
-    } catch (err) {
-      console.warn('체인 전환 실패 또는 건너뜀:', err);
-    }
-
+    // 먼저 계정 연결 요청
+    console.log('📝 계정 연결 요청 중...');
     const accounts = await browserProvider.send('eth_requestAccounts', []);
     if (!accounts || accounts.length === 0) {
-      throw new Error('MetaMask 계정을 가져올 수 없습니다');
+      throw new Error('MetaMask 계정을 가져올 수 없습니다. MetaMask에서 연결을 승인해주세요.');
+    }
+    console.log('✅ 계정 연결됨:', accounts[0]);
+
+    // 네트워크 확인 및 필요 시 추가/전환
+    const ARBITRUM_SEPOLIA_CHAIN_ID = 421614;
+    const ARBITRUM_SEPOLIA_HEX = '0x66eee';
+
+    try {
+      const network = await browserProvider.getNetwork();
+      console.log('현재 네트워크:', network.chainId.toString());
+
+      if (network.chainId !== BigInt(ARBITRUM_SEPOLIA_CHAIN_ID)) {
+        console.log('⚠️ Arbitrum Sepolia로 전환 필요');
+
+        try {
+          // 먼저 네트워크 전환 시도
+          await browserProvider.send('wallet_switchEthereumChain', [{
+            chainId: ARBITRUM_SEPOLIA_HEX
+          }]);
+          console.log('✅ Arbitrum Sepolia로 전환 완료');
+        } catch (switchError: any) {
+          // 네트워크가 없으면 추가
+          if (switchError.code === 4902 || switchError.message?.includes('Unrecognized chain')) {
+            console.log('📝 Arbitrum Sepolia 네트워크 추가 중...');
+
+            await browserProvider.send('wallet_addEthereumChain', [{
+              chainId: ARBITRUM_SEPOLIA_HEX,
+              chainName: 'Arbitrum Sepolia',
+              nativeCurrency: {
+                name: 'ETH',
+                symbol: 'ETH',
+                decimals: 18
+              },
+              rpcUrls: ['https://sepolia-rollup.arbitrum.io/rpc'],
+              blockExplorerUrls: ['https://sepolia.arbiscan.io']
+            }]);
+            console.log('✅ Arbitrum Sepolia 네트워크 추가 완료');
+          } else {
+            throw switchError;
+          }
+        }
+      } else {
+        console.log('✅ 이미 Arbitrum Sepolia 네트워크');
+      }
+    } catch (err: any) {
+      console.error('⚠️ 네트워크 전환 에러:', err);
+      throw new Error(`네트워크 전환 실패: ${err.message || '사용자가 거부했거나 네트워크 설정에 문제가 있습니다.'}`);
     }
 
     const signer = await browserProvider.getSigner();
     const address = await signer.getAddress();
     setMetamaskSigner(signer);
 
-    const did = createDID(address, 421614); // Arbitrum Sepolia
+    const did = createDID(address, ARBITRUM_SEPOLIA_CHAIN_ID); // Arbitrum Sepolia
     const userData: User = {
       email: `${address.toLowerCase()}@metamask`,
       name: 'MetaMask 지갑',
