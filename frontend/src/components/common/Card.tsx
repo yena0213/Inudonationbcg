@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, CSSProperties } from 'react';
 
 interface CardProps {
   children: ReactNode;
@@ -7,6 +7,7 @@ interface CardProps {
   shadow?: boolean;
   hover?: boolean;
   onClick?: () => void;
+  style?: CSSProperties;
 }
 
 export function Card({ 
@@ -15,7 +16,8 @@ export function Card({
   padding = 'lg',
   shadow = true,
   hover = false,
-  onClick
+  onClick,
+  style: styleOverride
 }: CardProps) {
   const paddingStyles = {
     sm: 'p-4',
@@ -31,6 +33,7 @@ export function Card({
     borderRadius: 'var(--card-border-radius)',
     boxShadow: shadow ? 'var(--card-shadow)' : 'none',
     transition: 'var(--transition-base)',
+    ...styleOverride,
   };
   
   return (

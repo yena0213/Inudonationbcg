@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { X, Loader2, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
 import { ethers } from 'ethers';
-import type { Campaign } from '../App';
+import type { Campaign } from '../types';
 import { CONTRACT_ADDRESS, DONATION_LEDGER_ABI, krwToEth, getTxExplorerUrl, isContractDeployed } from '../lib/contract';
 import { useAuth } from '../lib/auth-context';
 import { verifyDonation } from '../lib/api';

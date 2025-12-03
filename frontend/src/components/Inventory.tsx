@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, Award, History, Wallet, ExternalLink } from 'lucide-react';
-import type { User, Badge, Donation } from '../App';
+import type { User, Badge, Donation } from '../types';
 import { DonationDetail } from './DonationDetail';
 import { getTxExplorerUrl } from '../lib/contract';
 

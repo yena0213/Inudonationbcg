@@ -15,6 +15,7 @@ interface User {
   did: string;
   walletType: 'embedded' | 'metamask';
   isOrganization?: boolean;
+  points?: number;
 }
 
 interface AuthContextType {

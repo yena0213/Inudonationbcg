@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ArrowLeft, ShoppingBag, Package, Trash2, FileKey, Award } from 'lucide-react';
-import type { User, FurnitureItem } from '../App';
+import type { User, FurnitureItem } from '../types';
 import { getCredentials } from '../lib/did';
 
 interface MyHouseProps {
@@ -17,7 +17,7 @@ interface PlacedFurniture {
 
 export function MyHouse({ user, onBack }: MyHouseProps) {
   const [activeTab, setActiveTab] = useState<'room' | 'shop' | 'did'>('room');
-  
+
   // Mock furniture data
   const mockFurniture: FurnitureItem[] = [
     { id: 'f1', name: '나무 의자', type: 'furniture', imageUrl: '🪑', price: 5000, owned: false },
@@ -36,7 +36,6 @@ export function MyHouse({ user, onBack }: MyHouseProps) {
 
   const [furniture, setFurniture] = useState<FurnitureItem[]>(mockFurniture);
   const [placedItems, setPlacedItems] = useState<PlacedFurniture[]>([]);
-  const [draggedItem, setDraggedItem] = useState<string | null>(null);
 
   const handleBuyItem = (item: FurnitureItem) => {
     if (!user || user.points < item.price) return;
@@ -57,7 +56,6 @@ export function MyHouse({ user, onBack }: MyHouseProps) {
       e.dataTransfer.setData('furnitureId', furnitureId);
       e.dataTransfer.setData('type', 'new');
     }
-    setDraggedItem(furnitureId);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -92,7 +90,6 @@ export function MyHouse({ user, onBack }: MyHouseProps) {
       setPlacedItems([...placedItems, newPlacedItem]);
     }
     
-    setDraggedItem(null);
   };
 
   const handleRemoveItem = (placedId: string) => {
