@@ -28,6 +28,7 @@ function AppContent() {
         setCampaigns(data);
       } catch (error) {
         console.error('Failed to load campaigns:', error);
+        setCampaigns([]); // 에러 발생 시 빈 배열
       } finally {
         setLoading(false);
       }
@@ -35,6 +36,9 @@ function AppContent() {
 
     if (ready && authenticated) {
       loadCampaigns();
+    } else if (ready) {
+      // ready이지만 authenticated가 아니면 loading 해제
+      setLoading(false);
     }
   }, [ready, authenticated]);
 
