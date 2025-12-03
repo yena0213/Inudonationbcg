@@ -337,21 +337,43 @@ export async function saveDonation(donation: {
 }
 
 /**
- * 사용자의 기부 내역 조회
+ * 사용자의 기부 내역 조회 (캠페인 정보 포함)
  */
 export async function getUserDonations(walletAddress: string) {
   const { data, error } = await supabase
     .from('donations')
-    .select('*')
-    .eq('donor_address', walletAddress)
-    .order('timestamp', { ascending: false });
+    .select(`
+      id,
+      amount,
+      transaction_hash,
+      message,
+      created_at,
+      campaigns (
+        id,
+        title,
+        organization_name
+      )
+    `)
+    .eq('donor_wallet', walletAddress)
+    .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Failed to fetch user donations:', error);
     throw error;
   }
 
-  return data || [];
+  // 데이터 변환
+  return (data || []).map((donation: any) => ({
+    id: donation.id,
+    campaignId: donation.campaigns?.id || '',
+    campaignTitle: donation.campaigns?.title || '알 수 없는 캠페인',
+    organizationName: donation.campaigns?.organization_name || '알 수 없음',
+    amount: parseFloat(donation.amount),
+    txHash: donation.transaction_hash,
+    timestamp: donation.created_at,
+    message: donation.message,
+    status: 'success',
+  }));
 }
 
 // ==================== 가구 관련 ====================
@@ -442,19 +464,20 @@ export async function addUserBadge(userAddress: string, badgeName: string) {
 }
 
 /**
- * 사용자 뱃지 목록
+ * 사용자 뱃지 목록 조회
  */
-export async function getUserBadges(userAddress: string) {
+export async function getUserBadges(walletAddress: string) {
   const { data, error } = await supabase
     .from('user_badges')
-    .select('badge_name, earned_at')
-    .eq('user_address', userAddress)
+    .select('badge_type, earned_at')
+    .eq('user_id', walletAddress)
     .order('earned_at', { ascending: false });
 
   if (error) {
     console.error('Failed to fetch user badges:', error);
-    throw error;
+    // 에러 발생 시 빈 배열 반환 (테이블이 없을 수도 있음)
+    return [];
   }
 
-  return data || [];
+  return (data || []).map((badge: any) => badge.badge_type);
 }

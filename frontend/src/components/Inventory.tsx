@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowLeft, Award, History, Wallet, ExternalLink } from 'lucide-react';
 import type { User, Badge, Donation } from '../types';
 import { DonationDetail } from './DonationDetail';
 import { getTxExplorerUrl } from '../lib/contract';
+import { getUserDonations, getUserBadges } from '../lib/supabase-api';
 
 interface InventoryProps {
   user: User | null;
@@ -28,24 +29,55 @@ const openBlockExplorer = (txHash: string, e: React.MouseEvent) => {
 export function Inventory({ user, onBack }: InventoryProps) {
   const [activeTab, setActiveTab] = useState<'donations' | 'badges' | 'points'>('donations');
   const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [unlockedBadgeTypes, setUnlockedBadgeTypes] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // DB에서 기부 내역과 뱃지 가져오기
+  useEffect(() => {
+    const loadData = async () => {
+      if (!user?.walletAddress) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const [donationsData, badgeTypes] = await Promise.all([
+          getUserDonations(user.walletAddress),
+          getUserBadges(user.walletAddress),
+        ]);
+
+        setDonations(donationsData);
+        setUnlockedBadgeTypes(badgeTypes);
+      } catch (error) {
+        console.error('Failed to load inventory data:', error);
+        // 에러 발생 시 빈 배열 유지
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, [user?.walletAddress]);
 
   // 모든 뱃지 정의 (획득 여부와 관계없이)
   const allBadges: Badge[] = [
     {
-      id: 'first-donor',
+      id: 'first_donation',
       name: '첫 기부',
       description: '첫 번째 기부를 완료했어요',
       imageUrl: '🌱',
       tier: 'bronze',
-      unlockedAt: user && user.points >= 1000 ? '2024-01-15' : undefined
+      unlockedAt: unlockedBadgeTypes.includes('first_donation') ? '2024-01-15' : undefined
     },
     {
-      id: 'warm-heart',
+      id: 'generous_donor',
       name: '따뜻한 마음',
-      description: '누적 기부 10만원 달성',
+      description: '누적 기부 달성',
       imageUrl: '❤️',
       tier: 'silver',
-      unlockedAt: user && user.points >= 10000 ? '2024-02-01' : undefined
+      unlockedAt: unlockedBadgeTypes.includes('generous_donor') ? '2024-02-01' : undefined
     },
     {
       id: 'angel',
@@ -53,7 +85,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
       description: '누적 기부 50만원 달성',
       imageUrl: '😇',
       tier: 'gold',
-      unlockedAt: user && user.points >= 50000 ? '2024-03-10' : undefined
+      unlockedAt: unlockedBadgeTypes.includes('angel') ? '2024-03-10' : undefined
     },
     {
       id: 'hero',
@@ -61,7 +93,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
       description: '누적 기부 100만원 달성',
       imageUrl: '🦸',
       tier: 'platinum',
-      unlockedAt: user && user.points >= 100000 ? undefined : undefined
+      unlockedAt: unlockedBadgeTypes.includes('hero') ? '2024-03-20' : undefined
     },
     {
       id: 'environment',
@@ -69,7 +101,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
       description: '환경 분야에 3회 기부',
       imageUrl: '🌳',
       tier: 'special',
-      unlockedAt: undefined
+      unlockedAt: unlockedBadgeTypes.includes('environment') ? '2024-04-01' : undefined
     },
     {
       id: 'education',
@@ -77,7 +109,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
       description: '교육 분야에 5회 기부',
       imageUrl: '📚',
       tier: 'special',
-      unlockedAt: undefined
+      unlockedAt: unlockedBadgeTypes.includes('education') ? '2024-04-10' : undefined
     },
     {
       id: 'animal',
@@ -85,7 +117,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
       description: '동물 분야에 5회 기부',
       imageUrl: '🐾',
       tier: 'special',
-      unlockedAt: undefined
+      unlockedAt: unlockedBadgeTypes.includes('animal') ? '2024-04-15' : undefined
     },
     {
       id: 'consistent',
@@ -93,39 +125,12 @@ export function Inventory({ user, onBack }: InventoryProps) {
       description: '3개월 연속 기부',
       imageUrl: '⭐',
       tier: 'gold',
-      unlockedAt: undefined
+      unlockedAt: unlockedBadgeTypes.includes('consistent') ? '2024-05-01' : undefined
     },
   ];
 
-  // Mock donations data
-  const mockDonations: Donation[] = [
-    {
-      id: 'd1',
-      campaignId: 'camp1',
-      campaignTitle: '겨울나기 따뜻한 보금자리 만들기',
-      organizationName: '숲속동물보호센터',
-      amount: 30000,
-      txHash: '0xabcd1234...5678',
-      timestamp: '2025-11-28T10:30:00',
-      status: 'success'
-    },
-    {
-      id: 'd2',
-      campaignId: 'camp2',
-      campaignTitle: '사막화 방지 나무 심기 프로젝트',
-      organizationName: '초록나무재단',
-      amount: 50000,
-      txHash: '0x9876fedc...4321',
-      timestamp: '2025-11-25T14:20:00',
-      status: 'success'
-    }
-  ];
-
-  const [donations] = useState<Donation[]>(mockDonations);
-  const [badges] = useState<Badge[]>(allBadges);
-
-  const unlockedBadges = badges.filter(b => b.unlockedAt);
-  const lockedBadges = badges.filter(b => !b.unlockedAt);
+  const unlockedBadges = allBadges.filter(b => b.unlockedAt);
+  const lockedBadges = allBadges.filter(b => !b.unlockedAt);
   const totalDonated = donations.reduce((sum, d) => sum + d.amount, 0);
 
   // Show donation detail if selected
@@ -223,27 +228,16 @@ export function Inventory({ user, onBack }: InventoryProps) {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto">
-        {activeTab === 'donations' && (
+        {loading ? (
+          <div className="bg-white rounded-3xl shadow-xl p-12 border-4 border-blue-200 text-center">
+            <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-blue-700">데이터를 불러오는 중...</p>
+          </div>
+        ) : activeTab === 'donations' ? (
           <div>
-            {/* Development Mode Banner */}
-            <div className="bg-gradient-to-r from-orange-100 to-yellow-100 rounded-2xl p-4 border-2 border-orange-300 mb-4">
-              <div className="flex items-start gap-3">
-                <span className="text-2xl">⚠️</span>
-                <div className="flex-1">
-                  <p className="text-orange-800 font-semibold mb-1">개발 모드 (Mock 데이터)</p>
-                  <p className="text-orange-700 text-sm">
-                    현재는 테스트 데이터를 사용 중입니다. 실제 블록체인 연동을 위해서는 스마트 컨트랙트를 Arbitrum L2에 배포해야 합니다.
-                  </p>
-                  <p className="text-orange-600 text-xs mt-2">
-                    📝 /lib/api.ts에서 ENABLE_BACKEND = true로 변경하면 실제 트랜잭션 사용
-                  </p>
-                </div>
-              </div>
-            </div>
-
             <div className="bg-white rounded-3xl shadow-xl p-6 border-4 border-blue-200">
               <h3 className="text-blue-800 mb-4">기부 내역</h3>
-              
+
               {donations.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-blue-700 mb-2">아직 기부 내역이 없어요</p>
@@ -295,9 +289,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
               </div>
             </div>
           </div>
-        )}
-
-        {activeTab === 'badges' && (
+        ) : activeTab === 'badges' ? (
           <div className="space-y-6">
             {/* Unlocked badges */}
             {unlockedBadges.length > 0 && (
@@ -352,9 +344,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
               </ul>
             </div>
           </div>
-        )}
-
-        {activeTab === 'points' && (
+        ) : (
           <div className="bg-white rounded-3xl shadow-xl p-6 border-4 border-blue-200">
             <h3 className="text-blue-800 mb-4">내 포인트 정보</h3>
             
