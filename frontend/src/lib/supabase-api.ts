@@ -25,6 +25,7 @@ export async function getAllCampaigns(): Promise<Campaign[]> {
   // DB 스키마를 Frontend 타입으로 변환
   return (data || []).map((row) => ({
     id: row.id,
+    numericId: row.numeric_id, // 스마트 컨트랙트용 숫자 ID
     organizationName: row.organization_name,
     title: row.title,
     description: row.description,
@@ -57,6 +58,7 @@ export async function getCampaignById(id: string): Promise<Campaign | null> {
 
   return {
     id: data.id,
+    numericId: data.numeric_id, // 스마트 컨트랙트용 숫자 ID
     organizationName: data.organization_name,
     title: data.title,
     description: data.description,

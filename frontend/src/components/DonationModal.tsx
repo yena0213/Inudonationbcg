@@ -69,15 +69,18 @@ export function DonationModal({ campaign, onClose, onConfirm, userWallet }: Dona
       
       // 실제 블록체인 트랜잭션
       const contract = new ethers.Contract(CONTRACT_ADDRESS, DONATION_LEDGER_ABI, signer);
-      
+
       // KRW를 ETH로 변환
       const ethAmount = krwToEth(donationAmount);
       const valueInWei = ethers.parseEther(ethAmount);
-      
-      console.log(`Donating ${ethAmount} ETH (${donationAmount} KRW) to campaign ${campaign.id}`);
 
-      // 캠페인 ID를 숫자로 변환 (DonationVillage는 uint256 사용)
-      const campaignId = parseInt(campaign.id);
+      // 캠페인 ID 검증 (스마트 컨트랙트용 숫자 ID 필요)
+      if (!campaign.numericId) {
+        throw new Error('캠페인에 숫자 ID가 없습니다. 관리자에게 문의하세요.');
+      }
+
+      const campaignId = campaign.numericId;
+      console.log(`Donating ${ethAmount} ETH (${donationAmount} KRW) to campaign #${campaignId} (${campaign.id})`);
 
       // 기부 트랜잭션 전송
       const tx = await contract.donate(campaignId, message || '', {

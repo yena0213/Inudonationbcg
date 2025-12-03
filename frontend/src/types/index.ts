@@ -4,7 +4,8 @@
 
 // Campaign 타입 정의
 export interface Campaign {
-  id: string;
+  id: string; // UUID (데이터베이스용)
+  numericId?: number; // 숫자 ID (스마트 컨트랙트용)
   organizationName: string;
   title: string;
   description: string;

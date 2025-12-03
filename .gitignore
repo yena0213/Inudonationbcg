@@ -3,3 +3,6 @@ node_modules/
 .env
 .env.local
 *.log
+
+AGENTS.mdcd
+EMBEDDED_WALLET_ADDRESS.md
