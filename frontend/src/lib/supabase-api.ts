@@ -469,8 +469,8 @@ export async function addUserBadge(userAddress: string, badgeName: string) {
 export async function getUserBadges(walletAddress: string) {
   const { data, error } = await supabase
     .from('user_badges')
-    .select('badge_type, earned_at')
-    .eq('user_id', walletAddress)
+    .select('badge_name, earned_at')
+    .eq('user_address', walletAddress)
     .order('earned_at', { ascending: false });
 
   if (error) {
@@ -479,5 +479,5 @@ export async function getUserBadges(walletAddress: string) {
     return [];
   }
 
-  return (data || []).map((badge: any) => badge.badge_type);
+  return (data || []).map((badge: any) => badge.badge_name);
 }

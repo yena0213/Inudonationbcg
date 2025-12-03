@@ -257,7 +257,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
                           <p className="text-blue-600 text-sm">{donation.organizationName}</p>
                         </div>
                         <div className="text-right">
-                          <p className="text-blue-800">{donation.amount.toLocaleString()}원</p>
+                          <p className="text-blue-800">{(donation.amount || 0).toLocaleString()}원</p>
                           <span className="inline-block px-2 py-1 bg-green-100 text-green-700 rounded-lg text-xs mt-1">
                             완료
                           </span>
@@ -358,7 +358,7 @@ export function Inventory({ user, onBack }: InventoryProps) {
 
               <div className="bg-green-50 rounded-2xl p-4 border-2 border-green-200">
                 <p className="text-green-700 mb-2">보유 포인트</p>
-                <p className="text-green-800">{user?.points.toLocaleString() || 0} P</p>
+                <p className="text-green-800">{(user?.points || 0).toLocaleString()} P</p>
               </div>
 
               <div className="bg-purple-50 rounded-2xl p-4 border-2 border-purple-200">
