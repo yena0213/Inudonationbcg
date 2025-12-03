@@ -17,10 +17,13 @@ export function Button({
   ...props 
 }: ButtonProps) {
   const baseStyles = `
+    rounded-xl
     transition-all
-    disabled:opacity-50 
+    disabled:opacity-50
     disabled:cursor-not-allowed
     font-medium
+    shadow-md
+    hover:shadow-lg
   `.replace(/\s+/g, ' ').trim();
   
   const variantStyles = {
