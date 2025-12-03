@@ -1,0 +1,15 @@
+Embedded Wallet Address for Testing:
+0x93517889cb1Acf36072b27268FEDe02c4814Fac4
+
+DID:
+did:ethr:arbitrum-sepolia:0x93517889cb1acf36072b27268fede02c4814fac4
+
+Network:
+Arbitrum Sepolia (Chain ID: 421614)
+
+Faucet Links:
+1. Alchemy: https://www.alchemy.com/faucets/arbitrum-sepolia
+2. QuickNode: https://faucet.quicknode.com/arbitrum/sepolia
+
+Explorer:
+https://sepolia.arbiscan.io/address/0x93517889cb1Acf36072b27268FEDe02c4814Fac4
