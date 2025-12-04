@@ -1,8 +1,19 @@
+# Vercel
 .vercel
+
+# Dependencies
 node_modules/
+
+# Environment files
 .env
 .env.local
+
+# Logs
 *.log
 
-AGENTS.mdcd
-EMBEDDED_WALLET_ADDRESS.md
+# Claude Code
+.claude/
+
+# Build outputs
+dist/
+build/
