@@ -392,12 +392,6 @@ npm run dev
 
 이 프로젝트는 MIT 라이선스를 따릅니다.
 
-## 👥 팀 정보
-
-- **Frontend**: React + TypeScript + Vite
-- **Backend**: Supabase + Hono
-- **Blockchain**: Solidity + Hardhat + ethers.js
-
 ## 🔗 관련 링크
 
 ### 프로젝트 링크
@@ -411,11 +405,3 @@ npm run dev
 - [ethers.js Documentation](https://docs.ethers.org/v6/)
 - [Hardhat Documentation](https://hardhat.org/)
 - [OpenZeppelin Contracts](https://docs.openzeppelin.com/contracts/)
-
-## 📧 문의
-
-프로젝트 관련 문의사항은 GitHub Issues를 통해 남겨주세요.
-
----
-
-Made with ❤️ by Donation Village Team
