@@ -339,6 +339,24 @@ export async function saveDonation(donation: {
 }
 
 /**
+ * wallet address로 user ID 조회
+ */
+async function getUserIdByWallet(walletAddress: string): Promise<string | null> {
+  const { data, error } = await supabase
+    .from('users')
+    .select('id')
+    .eq('wallet_address', walletAddress)
+    .single();
+
+  if (error) {
+    console.error('Failed to fetch user by wallet:', error);
+    return null;
+  }
+
+  return data?.id || null;
+}
+
+/**
  * 사용자의 기부 내역 조회 (캠페인 정보 포함)
  */
 export async function getUserDonations(walletAddress: string) {
@@ -384,11 +402,17 @@ export async function getUserDonations(walletAddress: string) {
  * 가구 구매
  */
 export async function buyFurniture(userAddress: string, furnitureId: string, price: number) {
+  // wallet address로 user ID 조회
+  const userId = await getUserIdByWallet(userAddress);
+  if (!userId) {
+    throw new Error('User not found');
+  }
+
   // 현재 포인트 확인
   const { data: user } = await supabase
     .from('users')
     .select('points')
-    .eq('wallet_address', userAddress)
+    .eq('id', userId)
     .single();
 
   if (!user) {
@@ -405,8 +429,8 @@ export async function buyFurniture(userAddress: string, furnitureId: string, pri
     .from('furniture_owned')
     .insert([
       {
-        user_address: userAddress,
-        furniture_id: furnitureId,
+        user_id: userId,
+        furniture_type: furnitureId,
       },
     ]);
 
@@ -430,17 +454,24 @@ export async function buyFurniture(userAddress: string, furnitureId: string, pri
  * 사용자 소유 가구 목록
  */
 export async function getUserFurniture(userAddress: string) {
+  // wallet address로 user ID 조회
+  const userId = await getUserIdByWallet(userAddress);
+  if (!userId) {
+    console.error('User not found for wallet:', userAddress);
+    return [];
+  }
+
   const { data, error } = await supabase
     .from('furniture_owned')
-    .select('furniture_id')
-    .eq('user_address', userAddress);
+    .select('furniture_type')
+    .eq('user_id', userId);
 
   if (error) {
     console.error('Failed to fetch user furniture:', error);
     throw error;
   }
 
-  return (data || []).map((row) => row.furniture_id);
+  return (data || []).map((row) => row.furniture_type);
 }
 
 // ==================== 뱃지 관련 ====================
@@ -449,12 +480,19 @@ export async function getUserFurniture(userAddress: string) {
  * 뱃지 추가
  */
 export async function addUserBadge(userAddress: string, badgeName: string) {
+  // wallet address로 user ID 조회
+  const userId = await getUserIdByWallet(userAddress);
+  if (!userId) {
+    console.error('User not found for wallet:', userAddress);
+    return;
+  }
+
   const { error } = await supabase
     .from('user_badges')
     .insert([
       {
-        user_address: userAddress,
-        badge_name: badgeName,
+        user_id: userId,
+        badge_type: badgeName,
       },
     ]);
 
@@ -469,10 +507,17 @@ export async function addUserBadge(userAddress: string, badgeName: string) {
  * 사용자 뱃지 목록 조회
  */
 export async function getUserBadges(walletAddress: string) {
+  // wallet address로 user ID 조회
+  const userId = await getUserIdByWallet(walletAddress);
+  if (!userId) {
+    console.error('User not found for wallet:', walletAddress);
+    return [];
+  }
+
   const { data, error } = await supabase
     .from('user_badges')
-    .select('badge_name, earned_at')
-    .eq('user_address', walletAddress)
+    .select('badge_type, earned_at')
+    .eq('user_id', userId)
     .order('earned_at', { ascending: false });
 
   if (error) {
@@ -481,5 +526,5 @@ export async function getUserBadges(walletAddress: string) {
     return [];
   }
 
-  return (data || []).map((badge: any) => badge.badge_name);
+  return (data || []).map((badge: any) => badge.badge_type);
 }
