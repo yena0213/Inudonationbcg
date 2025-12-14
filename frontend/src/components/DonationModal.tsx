@@ -24,9 +24,22 @@ export function DonationModal({ campaign, onClose, onConfirm, userWallet }: Dona
 
   const presetAmounts = [10000, 30000, 50000, 100000];
 
+  // 캠페인 마감 여부 확인
+  const isCampaignExpired = (): boolean => {
+    if (!campaign.deadline) return false;
+    return new Date(campaign.deadline) < new Date();
+  };
+
   const handleDonate = async () => {
     const donationAmount = parseInt(amount);
     if (!donationAmount || donationAmount <= 0) return;
+
+    // 마감된 캠페인인지 확인
+    if (isCampaignExpired()) {
+      setErrorMessage('기부 기간이 만료되었습니다!');
+      setStatus('error');
+      return;
+    }
 
     const signer = getEthereumSigner();
     

@@ -19,13 +19,21 @@ function AppContent() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // 캠페인이 마감되었는지 확인하는 함수
+  const isCampaignExpired = (campaign: Campaign): boolean => {
+    if (!campaign.deadline) return false;
+    return new Date(campaign.deadline) < new Date();
+  };
+
   // Supabase에서 캠페인 데이터 로드
   useEffect(() => {
     const loadCampaigns = async () => {
       try {
         setLoading(true);
         const data = await getAllCampaigns();
-        setCampaigns(data);
+        // 마감되지 않은 캠페인만 필터링
+        const activeCampaigns = data.filter(campaign => !isCampaignExpired(campaign));
+        setCampaigns(activeCampaigns);
       } catch (error) {
         console.error('Failed to load campaigns:', error);
         setCampaigns([]); // 에러 발생 시 빈 배열
